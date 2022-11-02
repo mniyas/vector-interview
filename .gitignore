@@ -129,5 +129,7 @@ dmypy.json
 .pyre/
 
 # Local data
-data/
+input_data/
 classifier/training/logs/
+todo
+.DS_Store
