@@ -2,7 +2,5 @@ h5py
 importlib-metadata>=4.4
 numpy
 requests
-torch>=1.12,<1.13
-torchvision>=0.13
-# versioned to avoid breaking change in minor version update
-markupsafe<2.1
+torch
+torchvision
