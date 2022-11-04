@@ -5,11 +5,10 @@ from typing import Union
 import base64
 
 from PIL import Image
-import smart_open
 
 
 def read_image_pil(image_uri: Union[Path, str], grayscale=False) -> Image:
-    with smart_open.open(image_uri, "rb") as image_file:
+    with open(image_uri, "rb") as image_file:
         return read_image_pil_file(image_file, grayscale)
 
 
