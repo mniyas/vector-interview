@@ -36,7 +36,7 @@ class ResNet(pl.LightningModule):
             representations = self.feature_extractor(x).flatten(1)
         x = self.classifier(representations)
         return x
-    
+
     @staticmethod
     def add_to_argparse(parser):
         return parser

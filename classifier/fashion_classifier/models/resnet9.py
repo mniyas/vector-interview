@@ -4,6 +4,7 @@ from typing import Any, Dict
 import torch
 from torch import nn
 
+
 class ResNetBlock(nn.Module):
     def __init__(self, c_in, act_fn, subsample=False, c_out=-1):
         """
@@ -94,7 +95,7 @@ class ResNet(nn.Module):
         # Fan-out focuses on the gradient distribution, and is commonly used in ResNets
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity='relu')
+                nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
             elif isinstance(m, nn.BatchNorm2d):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)

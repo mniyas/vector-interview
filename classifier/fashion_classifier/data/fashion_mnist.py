@@ -16,10 +16,7 @@ class FashionMNIST(BaseDataModule):
     def __init__(self, args: argparse.Namespace) -> None:
         super().__init__(args)
         self.data_dir = settings.DOWNLOADED_DATA_DIRNAME
-        self.transform = T.Compose([
-                T.ToTensor(),
-                T.Normalize((0.2861,), (0.3530,))
-            ])
+        self.transform = T.Compose([T.ToTensor(), T.Normalize((0.2861,), (0.3530,))])
         self.input_dims = settings.DIMS
         self.output_dims = settings.OUTPUT_DIMS
         self.mapping = settings.MAPPING
