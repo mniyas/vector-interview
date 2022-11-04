@@ -130,7 +130,7 @@ dmypy.json
 
 # Local data
 input_data/
-classifier/training/logs/
+training/logs/
 todo
 .DS_Store
 oryx-build-commands.txt

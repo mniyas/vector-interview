@@ -2,7 +2,7 @@ from confluent_kafka import Producer, Consumer
 from confluent_kafka.admin import AdminClient, NewTopic
 
 
-from base_pubsub import BasePubSub
+from pubsub import BasePubSub
 
 
 class KafkaPubSub(BasePubSub):
@@ -12,7 +12,7 @@ class KafkaPubSub(BasePubSub):
         self.topic = kwargs.get("topic", "test")
         self._producer, self._consumer = None, None
         self._admin = None
-        if self.client_type == "producer":
+        if self.client_type == "publisher":
             self._producer = Producer({"bootstrap.servers": self.server})
             self.create_topic()
         else:
@@ -68,13 +68,14 @@ class KafkaPubSub(BasePubSub):
         """Receive a message from a topic."""
         while True:
             message = self._consumer.poll(1.0)
+            print(message)
             if message is None:
                 continue
             if message.error():
                 print("Consumer error: {}".format(message.error()))
                 continue
-            print("Received message: {}".format(message.value().decode("utf-8")))
-            yield message.value().decode("utf-8")
+            # print("Received message: {}".format(message.value()))
+            yield message.value()
 
     def delivery_report(self, err, decoded_message):
         """Delivery report handler called on

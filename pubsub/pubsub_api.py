@@ -1,5 +1,5 @@
-from kafka_pubsub import KafkaPubSub
-from google_pubsub import GooglePubSub
+from pubsub import KafkaPubSub
+from pubsub import GooglePubSub
 
 
 class PubSubAPI:
@@ -26,20 +26,20 @@ if __name__ == "__main__":
     # send message
     args = {
         "broker_type": "Kafka",
-        "client_type": "producer",
+        "client_type": "publisher",
         "topic": "test1",
     }
-    producer = PubSubAPI(**args)
-    producer.send(message="Test message for Kafka")
+    publisher = PubSubAPI(**args)
+    publisher.send(message="Test message for Kafka")
     # receive message
-    args["client_type"] = "consumer"
-    consumer = PubSubAPI(**args)
-    for message in consumer.receive():
+    args["client_type"] = "subscriber"
+    subscriber = PubSubAPI(**args)
+    for message in subscriber.receive():
         print(message)
 
     # -------------------------- Test GooglePubSub --------------------------
     # Note: you need to create a Google Cloud project and enable the Pub/Sub API
-    # Also, the following code won't execute since the Kafka consumer is blocking
+    # Also, the following code won't execute since the Kafka subscriber is blocking
     # Comment out the above code to test this
     # send message
     args = {
@@ -47,12 +47,12 @@ if __name__ == "__main__":
         "project_id": "vector-interview",
         "topic_id": "test",
         "subscription_id": "test1",
-        "client_type": "producer",
+        "client_type": "publisher",
     }
-    producer = PubSubAPI(**args)
-    producer.send(message="Test message for GooglePubSub")
+    publisher = PubSubAPI(**args)
+    publisher.send(message="Test message for GooglePubSub")
     # receive message
-    args["client_type"] = "consumer"
-    consumer = PubSubAPI(**args)
-    for message in consumer.receive():
+    args["client_type"] = "subscriber"
+    subscriber = PubSubAPI(**args)
+    for message in subscriber.receive():
         print(message)

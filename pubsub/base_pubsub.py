@@ -3,11 +3,11 @@ from typing import Union
 
 
 class BasePubSub(ABC):
-    def __init__(self, client_type: str = "producer", *args, **kwargs) -> None:
+    def __init__(self, client_type: str = "publisher", *args, **kwargs) -> None:
         self.client_type = client_type
         super().__init__()
-        if client_type not in ["producer", "consumer"]:
-            raise ValueError("client_type must be either 'producer' or 'consumer'")
+        if client_type not in ["publisher", "subscriber"]:
+            raise ValueError("client_type must be either 'publisher' or 'subscriber'")
         self.client_type = client_type
 
     @abstractmethod

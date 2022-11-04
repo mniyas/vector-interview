@@ -5,7 +5,7 @@ from typing import Sequence, Union
 from fashion_classifier.lit_models import BaseLitModel
 from fashion_classifier.models import ResNet
 from fashion_classifier.data.config import MAPPING, DOWNLOADED_DATA_DIRNAME
-import util
+import fashion_classifier.util
 from torchvision import transforms as T
 from PIL import Image
 import torch
@@ -40,7 +40,7 @@ class FashionClassifierModel:
 
 
 if __name__ == "__main__":
-    model = FashionClassifierModel("artifacts/epoch=0004-validation.loss=0.247.ckpt")
+    model = FashionClassifierModel("artifacts/epoch=0004-validation.loss=0.220.ckpt")
     data_dir = DOWNLOADED_DATA_DIRNAME
     data = TorchFashionMNIST(data_dir, train=False, download=True)
     prediction = model.predict(data[0][0])

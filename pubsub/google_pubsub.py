@@ -1,5 +1,5 @@
 import time
-from base_pubsub import BasePubSub
+from pubsub import BasePubSub
 from google.cloud import pubsub_v1
 from typing import Callable
 

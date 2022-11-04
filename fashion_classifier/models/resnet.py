@@ -31,7 +31,7 @@ class ResNetBlock(nn.Module):
 
         # 1x1 convolution with stride 2 means we take the upper left value, and transform it to new output size
         self.downsample = nn.Conv2d(c_in, c_out, kernel_size=1, stride=2) if subsample else None
-        self.act_fn = nn.ReLU()
+        self.act_fn = act_fn
 
     def forward(self, x):
         z = self.net(x)
@@ -47,11 +47,6 @@ class ResNet(nn.Module):
         super().__init__()
         self.args = vars(args) if args is not None else {}
         self.data_config = data_config
-        # _, input_height, input_width = self.data_config["input_dims"]
-        # assert (
-        #     input_height == input_width
-        # ), f"input height and width should be equal, but was {input_height}, {input_width}"
-        # self.input_height, self.input_width = input_height, input_width
 
         self.num_classes = len(self.data_config["mapping"])
         self.num_blocks = [3, 3, 3]

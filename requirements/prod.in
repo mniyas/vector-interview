@@ -1,8 +1,8 @@
 h5py
-importlib-metadata>=4.4
+# importlib-metadata>=4.4
 numpy
-requests
+# requests
 torch
 torchvision
 confluent-kafka
-google-cloud-pubsub
+# google-cloud-pubsub
