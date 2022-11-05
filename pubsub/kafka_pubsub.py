@@ -68,13 +68,11 @@ class KafkaPubSub(BasePubSub):
         """Receive a message from a topic."""
         while True:
             message = self._consumer.poll(1.0)
-            print(message)
             if message is None:
                 continue
             if message.error():
                 print("Consumer error: {}".format(message.error()))
                 continue
-            # print("Received message: {}".format(message.value()))
             yield message.value()
 
     def delivery_report(self, err, decoded_message):

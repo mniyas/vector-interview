@@ -1,47 +1,30 @@
-from torchvision.datasets import FashionMNIST as TorchFashionMNIST
-from fashion_classifier import util
-from fashion_classifier.data.config import DOWNLOADED_DATA_DIRNAME
 from pubsub import PubSubAPI
+import json
 
-# Get FashionMNIST test data
-data = TorchFashionMNIST(DOWNLOADED_DATA_DIRNAME, train=False, download=True)
-
-# Create a Kafka Producer
-args = {
-    "broker_type": "Kafka",
-    "client_type": "publisher",
-    "topic": "images",
-}
-kafka_publisher = PubSubAPI(**args)
-
-# Create a Kafka Consumer
+# # Create a Google PubSub Subscriber
+# args = {
+#     "broker_type": "GooglePubSub",
+#     "client_type": "subscriber",
+#     "topic": "predictions",
+#     "project_id": "vector-interview-367721",
+#     "subscription_id": "predictions-subscription",
+# }
+# Create a Kafka Subscriber
 args = {
     "broker_type": "Kafka",
     "client_type": "subscriber",
     "topic": "predictions",
 }
-kafka_consumer = PubSubAPI(**args)
+subscriber = PubSubAPI(**args)
 
-
-
-def send_images() -> None:
-    # Send the first 10 images to the Kafka topic
-    for i in range(10):
-        image = data[i][0]
-        bytearray = util.image_to_byte_array(image)
-        message_id = util.get_random_id()
-        # add the message_id to the message
-        # message = bytearray + b"message_id:" + message_id.encode("utf-8")
-        message = bytearray
-        kafka_publisher.send(message=message)
 
 def receive_predictions() -> None:
-    # Receive the predictions from the Kafka topic
-    for message in kafka_consumer.receive():
-        print(message)
+    # Receive the predictions from the subscriber
+    for message in subscriber.receive():
+        decoded_message = json.loads(message)
+        print(decoded_message)
+
 
 # Run the functions in parallel
 if __name__ == "__main__":
-    # receive_predictions()
-    for message in kafka_consumer.receive():
-        print(message)
+    receive_predictions()

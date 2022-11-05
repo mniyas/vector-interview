@@ -1,6 +1,7 @@
 import time
 from pubsub import BasePubSub
 from google.cloud import pubsub_v1
+from google.api_core.exceptions import AlreadyExists
 from typing import Callable
 
 
@@ -8,15 +9,18 @@ class GooglePubSub(BasePubSub):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.project_id = kwargs.get("project_id", "vector-interview")
-        self.topic_id = kwargs.get("topic_id", "test")
+        self.topic_id = kwargs.get("topic", "test")
         self.subscription_id = kwargs.get("subscription_id", "test1")
         self.publisher, self.subscriber = None, None
-        if self.client_type == "producer":
+        if self.client_type == "publisher":
             self.publisher = pubsub_v1.PublisherClient()
+            print("Publisher created")
             self.topic_path = self.publisher.topic_path(self.project_id, self.topic_id)
+            print("Topic path created", self.topic_path)
             # create topic if it doesn't exist
             try:
                 self.publisher.get_topic(request={"topic": self.topic_path})
+                print(f"{self.topic_path} Topic exists")
             except Exception:
                 self.create_topic()
         else:
@@ -25,9 +29,9 @@ class GooglePubSub(BasePubSub):
             self.topic_path = self.subscriber.topic_path(self.project_id, self.topic_id)
             # create subscription if it doesn't exist
             try:
-                self.subscriber.get_subscription(request={"subscription": self.subscription_path})
-            except Exception as e:
                 self.create_subscription()
+            except AlreadyExists:
+                print("Subscription already exists")
 
     def create_subscription(self, *args, **kwargs) -> None:
         """Create a new Pub/Sub subscription."""
@@ -49,6 +53,7 @@ class GooglePubSub(BasePubSub):
 
     def create_topic(self) -> None:
         """Create a new Pub/Sub topic."""
+        print("Creating topic: {}".format(self.topic_path))
         topic = self.publisher.create_topic(request={"name": self.topic_path})
         print(f"Created topic: {topic.name}")
 
@@ -67,9 +72,10 @@ class GooglePubSub(BasePubSub):
         """Receive a message from a topic."""
         from google.api_core import retry
 
+        print("Listening for messages on {}".format(self.subscription_path))
         while True:
             response = self.subscriber.pull(
-                request={"subscription": self.subscription_path, "max_messages": 3},
+                request={"subscription": self.subscription_path, "max_messages": 10},
                 retry=retry.Retry(deadline=300),
             )
             if len(response.received_messages) == 0:

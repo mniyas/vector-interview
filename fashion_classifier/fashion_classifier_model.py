@@ -1,11 +1,11 @@
 import argparse
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Union
 
 from fashion_classifier.lit_models import BaseLitModel
 from fashion_classifier.models import ResNet
 from fashion_classifier.data.config import MAPPING, DOWNLOADED_DATA_DIRNAME
-import fashion_classifier.util
+from fashion_classifier import util
 from torchvision import transforms as T
 from PIL import Image
 import torch
