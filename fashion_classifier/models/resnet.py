@@ -1,7 +1,6 @@
 import argparse
 from typing import Any, Dict
 
-import torch
 from torch import nn
 
 
@@ -18,7 +17,6 @@ class ResNetBlock(nn.Module):
         if not subsample:
             c_out = c_in
 
-        # Network representing F
         self.net = nn.Sequential(
             nn.Conv2d(
                 c_in, c_out, kernel_size=3, padding=1, stride=1 if not subsample else 2, bias=False
@@ -86,8 +84,6 @@ class ResNet(nn.Module):
         )
 
     def _init_params(self):
-        # Based on our discussion in Tutorial 4, we should initialize the convolutions according to the activation function
-        # Fan-out focuses on the gradient distribution, and is commonly used in ResNets
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")

@@ -12,3 +12,6 @@ pip-tools:
 	pip-compile requirements/prod.in && pip-compile requirements/dev.in && pip-compile requirements/dev-lint.in
 	pip-sync requirements/prod.txt requirements/dev.txt requirements/dev-lint.txt
 
+# Install exact pip packages
+pip-install:
+	pip install -r requirements/prod.txt -r requirements/dev.txt -r requirements/dev-lint.txt

@@ -10,6 +10,7 @@ class KafkaPubSub(BasePubSub):
         super().__init__(*args, **kwargs)
         self.server = kwargs.get("server", "localhost:9092")
         self.topic = kwargs.get("topic", "test")
+        self.group_id = kwargs.get("group_id", "mygroup")
         self._producer, self._consumer = None, None
         self._admin = None
         if self.client_type == "publisher":
@@ -17,7 +18,7 @@ class KafkaPubSub(BasePubSub):
             self.create_topic()
         else:
             self._consumer = Consumer(
-                {"bootstrap.servers": self.server, "group.id": "mygroup", "auto.offset.reset": "earliest"}
+                {"bootstrap.servers": self.server, "group.id": self.group_id, "auto.offset.reset": "earliest"}
             )
             self.create_subscription()
 

@@ -24,20 +24,6 @@ def load_and_print_info(data_module_class) -> None:
     print(dataset)
 
 
-def _download_raw_dataset(metadata: Dict, dl_dirname: Path) -> Path:
-    dl_dirname.mkdir(parents=True, exist_ok=True)
-    filename = dl_dirname / metadata["filename"]
-    if filename.exists():
-        return filename
-    print(f"Downloading raw dataset from {metadata['url']} to {filename}...")
-    utils.download_url(metadata["url"], filename)
-    print("Computing SHA-256...")
-    sha256 = utils.compute_sha256(filename)
-    if sha256 != metadata["sha256"]:
-        raise ValueError("Downloaded data file SHA-256 does not match that listed in metadata document.")
-    return filename
-
-
 BATCH_SIZE = 128
 # NUM_AVAIL_CPUS = len(os.sched_getaffinity(0))    #TODO: Fix this
 NUM_AVAIL_CPUS = 4

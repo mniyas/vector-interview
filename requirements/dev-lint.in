@@ -1,3 +1,5 @@
+-c prod.txt
+-c dev.txt
 bandit
 black
 flake8

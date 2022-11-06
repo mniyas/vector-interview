@@ -1,3 +1,4 @@
+-c prod.txt
 pre-commit
 toml
 coverage[toml]==6.4
