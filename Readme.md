@@ -18,10 +18,13 @@ I have used conda for managing Python and pip-tools for managing Python package 
 
 ### Part 2
 To run Kafka I have used Docker image from Confluent.
-- Run Kafka using Docker by `docker compose -f pubsub/kafka-docker-compose.yml up -d`
+- Run Kafka using Docker by `docker compose -f docker-compose.yml up -d`
 
 To run GooglePubSub emulator:
 - Install the emulator following this [link](https://cloud.google.com/pubsub/docs/emulator)
+- Install Google PubSub client separately due to dependency [conflict](https://github.com/Lightning-AI/lightning/issues/9900)
+    - `pip install google-cloud-pubsub`
+    - `export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python`
 - Run the emulator by `gcloud beta emulators pubsub start --project=vector-interview-367721`
 - Take a note of the port at which emulator is running
 
@@ -78,7 +81,7 @@ Set the Google PubSub env variables:
 ```
 - `base_pubsub.py` implements an abstract class with `send` and `recieve` abstract methods. It takes client_type as an argument, which has to be either "publisher" or "subscriber". By default, it is a "publisher"
 - `kafka_pubsub.py` inherit the `BasePubSub` and implement the `send` and `recieve` methods for Kafka. The send method is `async` while the `recieve` method is a synchronous pull based approach. It takes the server, topic and group_id as arguments.
-- `google_pubsub.py` inherit the `BasePubSub` and implement the `send` and `recieve` methods for Google PubSub. The send method is `async` while the `recieve` method is a synchronous pull based approach.
+- `google_pubsub.py` inherit the `BasePubSub` and implement the `send` and `recieve` methods for Google PubSub. The send method is `async` while the `recieve` method is a synchronous pull based approach. It takes project_id, topic, subscription_id arguments
 - `pubsub_api.py` implements `PubSubAPI` which takes the broker_type as an argument, which could be either "Kafka" or "GooglePubSub". Sample usage of this interface is given in the file itself. Please refer to that.
 
 
@@ -98,6 +101,18 @@ Set the Google PubSub env variables:
 - `application_producer.py` file creates a Publisher using PubSubAPI and send a base64 encoded image and a random message id to a 'images' topic.
 - `model_service.py` file creates a Subscriber for 'images' topic and a Producer for 'predictions' topic. The service initlize the Classifier model from `fashion_classifier/fashion_classifier_model.py`. When a message is recieved by Subscriber, it decode the base64 encoded image into PIL Image and send it to model. The returned prediction is send to 'predictions' topic along with the message id in original message.
 - `application_consumer.py` file creates a Subscriber for 'predictions' topic. The messages arriving at 'predictions' are printed to the console up on arrival.
+
+# Running the pipeline with Docker
+Components of Part 3 can be run using Docker.
+### Build Docker images
+- `docker build --platform linux/amd64 -f Docker/ModelService.Dockerfile -t vector-model-service:0.0 .`
+- `docker build --platform linux/amd64 -f Docker/AppProducer.Dockerfile -t vector-application-producer:0.0 .`
+- `docker build --platform linux/amd64 -f Docker/AppConsumer.Dockerfile -t vector-application-consumer:0.0 .`
+## Run the images
+Please ensure that Kafka is running locally and run the following components.
+- `docker run --platform linux/amd64 --rm --tty --net=host --interactive vector-model-service:0.0`
+- `docker run --platform linux/amd64 --rm --tty --net=host --interactive vector-application-producer:0.0`
+- `docker run --platform linux/amd64 --rm --tty --net=host --interactive vector-application-consumer:0.0`
 
 
 ### Future Work

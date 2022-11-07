@@ -11,6 +11,7 @@ from fashion_classifier.util import read_image_pil_file
 
 class BytesEncoder(json.JSONEncoder):
     """JSON encoder for bytes objects."""
+
     def default(self, obj):
         if isinstance(obj, bytes):
             return obj.decode("utf-8")

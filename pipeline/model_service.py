@@ -1,6 +1,7 @@
 from fashion_classifier.fashion_classifier_model import FashionClassifierModel
 import util
 import json
+import os
 
 from pubsub import PubSubAPI
 
@@ -17,6 +18,7 @@ subscriber_args = {
     "broker_type": "Kafka",
     "client_type": "subscriber",
     "topic": "images",
+    "server": os.environ.get("KAFKA_SERVER", "localhost:9092"),
 }
 subscriber = PubSubAPI(**subscriber_args)
 
@@ -30,6 +32,7 @@ publisher_args = {
     "broker_type": "Kafka",
     "client_type": "publisher",
     "topic": "predictions",
+    "server": os.environ.get("KAFKA_SERVER", "localhost:9092"),
 }
 publisher = PubSubAPI(**publisher_args)
 

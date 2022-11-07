@@ -1,5 +1,6 @@
 from pubsub import PubSubAPI
 import json
+import os
 
 # # Create a Google PubSub Subscriber
 # args = {
@@ -14,6 +15,7 @@ args = {
     "broker_type": "Kafka",
     "client_type": "subscriber",
     "topic": "predictions",
+    "server": os.environ.get("KAFKA_SERVER", "localhost:9092"),
 }
 subscriber = PubSubAPI(**args)
 

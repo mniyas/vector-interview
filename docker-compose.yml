@@ -39,3 +39,46 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+  
+  # application_producer:
+  #   platform: linux/amd64
+  #   build:
+  #     context: .
+  #     dockerfile: Docker/AppProducer.Dockerfile
+  #   image: app_producer
+  #   hostname: application_producer
+  #   container_name: application_producer
+  #   depends_on:
+  #     - zookeeper
+  #     - broker
+  #   environment:
+  #     KAFKA_SERVER: broker
+
+  # model_service:
+  #   platform: linux/amd64
+  #   build:
+  #     context: .
+  #     dockerfile: Docker/ModelService.Dockerfile
+  #   image: model_service
+  #   hostname: model_service
+  #   container_name: model_service
+  #   depends_on:
+  #     - zookeeper
+  #     - broker
+  #   environment:
+  #     KAFKA_SERVER: broker
+
+  # application_consumer:
+  #   platform: linux/amd64
+  #   build:
+  #     context: .
+  #     dockerfile: Docker/AppConsumer.Dockerfile
+  #   image: app_consumer
+  #   hostname: application_consumer
+  #   container_name: application_consumer
+  #   depends_on:
+  #     - zookeeper
+  #     - broker
+  #   environment:
+  #     KAFKA_SERVER: broker
+  

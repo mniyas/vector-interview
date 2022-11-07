@@ -2,6 +2,7 @@ from torchvision.datasets import FashionMNIST as TorchFashionMNIST
 from fashion_classifier.data.config import DOWNLOADED_DATA_DIRNAME
 from pubsub import PubSubAPI
 import json
+import os
 import util
 import time
 import random
@@ -21,6 +22,7 @@ args = {
     "broker_type": "Kafka",
     "client_type": "publisher",
     "topic": "images",
+    "server": os.environ.get("KAFKA_SERVER", "localhost:9092"),
 }
 publisher = PubSubAPI(**args)
 
